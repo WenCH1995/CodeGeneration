@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: generator
+  autoconfigure:
+    exclude: com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure  # 为了某些版本的springboot  @SpringBootApplication(exclude= {DataSourceAutoConfiguration.class}) 无法生效
+  datasource:
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master，如果读者只是单数据源只需要注释掉slave相关配置即可，这里为了方便演示master与slave保持相同
+      datasource:
+        master:
+          username: fk
+          password: Haier,999
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.250.1.12:3306/fk_prod?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+        #        zqt_test:
+        #          username: zqt_admin
+        #          password: Haier,123
+        #          driver-class-name: com.mysql.jdbc.Driver
+        #          url: jdbc:mysql://10.135.17.238:3902/zqt?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+        hqt_pro:
+          username: hqt_admin
+          password: Haier,123
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://10.138.86.146:3662/hqt?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      initial-size: 10 # 以下是连接池配置
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      #validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: druid
+        login-password: 123456
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #type-aliases-package: com.hchain
+  mapper-locations: classpath:mapping/**/*.xml
+  global-config:
+    refresh-mapper: true
+server:
+  port: 8083
